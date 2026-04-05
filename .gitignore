@@ -1,0 +1,27 @@
+# Machine-specific configs (managed via .local files)
+*.local
+
+# Ansible artifacts
+*.retry
+
+# Secrets
+.env
+.env.*
+credentials.json
+service-account*.json
+*.pem
+*.key
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editor artifacts
+*.swp
+*.swo
+*~
+
+# Docs generated during planning (not part of the dotfiles)
+docs/

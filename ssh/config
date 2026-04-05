@@ -1,0 +1,60 @@
+# ~/.ssh/config - SSH client configuration
+# Managed by dotfiles: https://github.com/drew/dotfiles
+
+# =============================================================================
+# Global Defaults
+# =============================================================================
+
+Host *
+    # Security
+    IdentitiesOnly yes
+    HashKnownHosts yes
+
+    # Connection
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+    AddKeysToAgent yes
+
+    # macOS Keychain integration (ignored on Linux)
+    IgnoreUnknown UseKeychain
+    UseKeychain yes
+
+# =============================================================================
+# GitHub
+# =============================================================================
+
+Host github.com
+    HostName github.com
+    User git
+    # Key will be provided by Bitwarden SSH agent
+
+# =============================================================================
+# GitLab
+# =============================================================================
+
+Host gitlab.com
+    HostName gitlab.com
+    User git
+    # Key will be provided by Bitwarden SSH agent
+
+# =============================================================================
+# Example Host Configurations
+# =============================================================================
+
+# Personal server example
+# Host myserver
+#     HostName server.example.com
+#     User myuser
+#     Port 22
+
+# Jump host example
+# Host internal-server
+#     HostName 10.0.0.50
+#     User admin
+#     ProxyJump jumphost.example.com
+
+# =============================================================================
+# Include local SSH config (not in version control)
+# =============================================================================
+
+Include ~/.ssh/config.local

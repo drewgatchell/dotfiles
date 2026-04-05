@@ -1,0 +1,91 @@
+# Global gitignore - applies to all repositories
+# Managed by dotfiles: https://github.com/drew/dotfiles
+
+# =============================================================================
+# macOS
+# =============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# =============================================================================
+# Linux
+# =============================================================================
+*~
+.fuse_hidden*
+.nfs*
+
+# =============================================================================
+# Editors
+# =============================================================================
+
+# Vim
+*.swp
+*.swo
+*~
+.netrwhist
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================================================
+# Languages & Frameworks
+# =============================================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+*.egg
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.venv/
+venv/
+ENV/
+.env
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm
+.yarn-integrity
+
+# =============================================================================
+# Build & Dependencies
+# =============================================================================
+dist/
+build/
+*.log
+*.tmp
+*.temp
+.cache/
+
+# =============================================================================
+# Secrets & Local Config
+# =============================================================================
+*.local
+.env.local
+.env.*.local
+*.secret
+secrets/
+credentials.json
+service-account*.json

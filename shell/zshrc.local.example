@@ -1,0 +1,38 @@
+# ~/.zshrc.local - Machine-specific shell configuration
+# This file is NOT tracked in version control
+# Copy to ~/.zshrc.local and customize for your machine
+
+# =============================================================================
+# Work/Project Configuration
+# =============================================================================
+
+# Kubernetes
+# export KUBECONFIG="$HOME/.kube/config:$HOME/.kube/work-config"
+
+# Google Cloud
+# export CLOUDSDK_PYTHON="$(which python3)"
+# export GOOGLE_APPLICATION_CREDENTIALS="$HOME/.config/gcloud/credentials.json"
+
+# AWS
+# export AWS_PROFILE="default"
+# export AWS_DEFAULT_REGION="us-west-2"
+
+# =============================================================================
+# Project Aliases
+# =============================================================================
+
+# Work projects
+# alias myproject="cd ~/work/myproject && source .venv/bin/activate"
+
+# =============================================================================
+# Machine-Specific Paths
+# =============================================================================
+
+# Add any machine-specific paths here
+# export PATH="$HOME/custom-tools/bin:$PATH"
+
+# =============================================================================
+# Machine-Specific Settings
+# =============================================================================
+
+# Override any settings from main zshrc here

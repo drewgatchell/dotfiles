@@ -1,0 +1,49 @@
+---
+- name: Ensure parent directories exist for symlinks
+  ansible.builtin.file:
+    path: "{{ item.dest | dirname }}"
+    state: directory
+    mode: '0755'
+  loop: "{{ dotfile_links }}"
+  when: item.dest | dirname != ansible_env.HOME
+
+- name: Remove existing files/directories before symlinking
+  ansible.builtin.file:
+    path: "{{ item.dest }}"
+    state: absent
+  loop: "{{ dotfile_links }}"
+  when: item.dest is exists and item.dest is not link
+
+- name: Create dotfile symlinks
+  ansible.builtin.file:
+    src: "{{ dotfiles_dir }}/{{ item.src }}"
+    dest: "{{ item.dest }}"
+    state: link
+    force: true
+  loop: "{{ dotfile_links }}"
+
+- name: Check if local config templates should be copied
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.zshrc.local"
+  register: zshrc_local
+
+- name: Copy zshrc.local.example if no local config exists
+  ansible.builtin.copy:
+    src: "{{ dotfiles_dir }}/shell/zshrc.local.example"
+    dest: "{{ ansible_env.HOME }}/.zshrc.local"
+    mode: '0644'
+    remote_src: true
+  when: not zshrc_local.stat.exists
+
+- name: Check if local gitconfig exists
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.gitconfig.local"
+  register: gitconfig_local
+
+- name: Copy gitconfig.local.example if no local config exists
+  ansible.builtin.copy:
+    src: "{{ dotfiles_dir }}/git/gitconfig.local.example"
+    dest: "{{ ansible_env.HOME }}/.gitconfig.local"
+    mode: '0644'
+    remote_src: true
+  when: not gitconfig_local.stat.exists

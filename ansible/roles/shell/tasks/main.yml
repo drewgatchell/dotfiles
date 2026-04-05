@@ -1,0 +1,30 @@
+---
+- name: Check if oh-my-zsh is installed
+  ansible.builtin.stat:
+    path: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  register: ohmyzsh
+
+- name: Install oh-my-zsh
+  ansible.builtin.shell: |
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+  args:
+    creates: "{{ ansible_env.HOME }}/.oh-my-zsh"
+  when: not ohmyzsh.stat.exists
+
+- name: Get zsh path
+  ansible.builtin.command: which zsh
+  register: zsh_path
+  changed_when: false
+
+- name: Ensure zsh is in /etc/shells
+  ansible.builtin.lineinfile:
+    path: /etc/shells
+    line: "{{ zsh_path.stdout }}"
+    state: present
+  become: true
+
+- name: Set zsh as default shell
+  ansible.builtin.user:
+    name: "{{ ansible_env.USER }}"
+    shell: "{{ zsh_path.stdout }}"
+  become: true

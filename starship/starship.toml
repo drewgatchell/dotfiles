@@ -1,0 +1,125 @@
+# Starship Prompt Configuration
+# https://starship.rs/config/
+# Managed by dotfiles: https://github.com/drew/dotfiles
+
+# Timeout for commands (ms)
+command_timeout = 1000
+
+# Newline at start of prompt
+add_newline = true
+
+# =============================================================================
+# Prompt Format
+# =============================================================================
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$python\
+$nodejs\
+$rust\
+$golang\
+$kubernetes\
+$docker_context\
+$cmd_duration\
+$line_break\
+$character"""
+
+# =============================================================================
+# Core Modules
+# =============================================================================
+
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+
+[directory]
+truncation_length = 4
+truncate_to_repo = true
+style = "bold cyan"
+
+[cmd_duration]
+min_time = 2_000
+format = "[$duration]($style) "
+style = "yellow"
+
+# =============================================================================
+# Git
+# =============================================================================
+
+[git_branch]
+format = "[$symbol$branch]($style) "
+symbol = " "
+style = "bold purple"
+
+[git_status]
+format = '([$all_status$ahead_behind]($style) )'
+style = "bold red"
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "$${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
+
+# =============================================================================
+# Languages
+# =============================================================================
+
+[python]
+format = '[${symbol}${pyenv_prefix}(${version} )(\($virtualenv\) )]($style)'
+symbol = " "
+style = "yellow"
+
+[nodejs]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "green"
+
+[rust]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "red"
+
+[golang]
+format = "[$symbol($version )]($style)"
+symbol = " "
+style = "cyan"
+
+# =============================================================================
+# DevOps
+# =============================================================================
+
+[kubernetes]
+format = '[$symbol$context( \($namespace\))]($style) '
+symbol = "☸ "
+style = "bold blue"
+disabled = false
+detect_files = ['k8s', 'kubernetes', 'kustomization.yaml']
+
+[docker_context]
+format = "[$symbol$context]($style) "
+symbol = " "
+style = "blue"
+only_with_files = true
+
+# =============================================================================
+# System
+# =============================================================================
+
+[username]
+format = "[$user]($style)@"
+style_user = "bold green"
+show_always = false
+
+[hostname]
+format = "[$hostname]($style) "
+style = "bold green"
+ssh_only = true

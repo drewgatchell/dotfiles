@@ -1,0 +1,53 @@
+---
+# Dotfiles directory
+dotfiles_dir: "{{ ansible_env.HOME }}/.dotfiles"
+
+# Homebrew packages (macOS)
+homebrew_packages:
+  - fastfetch
+  - starship
+  - pipx
+  - uv
+  - git
+  - gh
+  - jq
+  - fzf
+  - ripgrep
+  - neovim
+  - bitwarden-cli
+
+homebrew_casks:
+  - ghostty
+  - google-cloud-sdk
+  - zed
+
+# APT packages (Linux)
+apt_packages:
+  - build-essential
+  - curl
+  - git
+  - unzip
+  - zsh
+  - fzf
+  - ripgrep
+  - jq
+
+# Symlinks to create
+# Format: { src: path relative to dotfiles_dir, dest: absolute path }
+dotfile_links:
+  - src: shell/zshrc
+    dest: "{{ ansible_env.HOME }}/.zshrc"
+  - src: git/gitconfig
+    dest: "{{ ansible_env.HOME }}/.gitconfig"
+  - src: git/gitignore_global
+    dest: "{{ ansible_env.HOME }}/.gitignore_global"
+  - src: ssh/config
+    dest: "{{ ansible_env.HOME }}/.ssh/config"
+  - src: starship/starship.toml
+    dest: "{{ ansible_env.HOME }}/.config/starship.toml"
+  - src: nvim
+    dest: "{{ ansible_env.HOME }}/.config/nvim"
+  - src: ghostty/config
+    dest: "{{ ansible_env.HOME }}/.config/ghostty/config"
+  - src: zed/settings.json
+    dest: "{{ ansible_env.HOME }}/.config/zed/settings.json"

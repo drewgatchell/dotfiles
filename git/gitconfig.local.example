@@ -1,0 +1,26 @@
+# ~/.gitconfig.local - Machine-specific git configuration
+# This file is NOT tracked in version control
+# Copy to ~/.gitconfig.local and customize for your machine
+
+[user]
+    name = Your Name
+    email = your.email@example.com
+
+# GPG Signing (optional)
+# [user]
+#     signingkey = YOUR_GPG_KEY_ID
+# [commit]
+#     gpgsign = true
+
+# Credential helper
+# macOS (uses Keychain)
+# [credential]
+#     helper = osxkeychain
+
+# Linux (uses libsecret)
+# [credential]
+#     helper = /usr/share/doc/git/contrib/credential/libsecret/git-credential-libsecret
+
+# Work-specific overrides
+# [includeIf "gitdir:~/work/"]
+#     path = ~/.gitconfig.work

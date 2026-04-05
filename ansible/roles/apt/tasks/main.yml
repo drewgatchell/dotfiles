@@ -1,0 +1,26 @@
+---
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true
+    cache_valid_time: 3600
+  become: true
+
+- name: Install apt packages
+  ansible.builtin.apt:
+    name: "{{ apt_packages }}"
+    state: present
+  become: true
+
+- name: Install Starship (Linux)
+  ansible.builtin.shell: |
+    curl -sS https://starship.rs/install.sh | sh -s -- -y
+  args:
+    creates: /usr/local/bin/starship
+
+- name: Install Neovim (Linux) - Download AppImage
+  ansible.builtin.get_url:
+    url: https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
+    dest: /usr/local/bin/nvim
+    mode: '0755'
+  become: true
+  when: ansible_architecture == "x86_64"

@@ -1,0 +1,46 @@
+---
+- name: Configure workstation
+  hosts: localhost
+  gather_facts: true
+
+  pre_tasks:
+    - name: Ensure .config directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.config"
+        state: directory
+        mode: '0755'
+
+    - name: Ensure .ssh directory exists
+      ansible.builtin.file:
+        path: "{{ ansible_env.HOME }}/.ssh"
+        state: directory
+        mode: '0700'
+
+  roles:
+    # Package managers
+    - role: homebrew
+      tags: [homebrew, packages]
+      when: ansible_os_family == "Darwin"
+
+    - role: apt
+      tags: [apt, packages]
+      when: ansible_os_family == "Debian"
+
+    # Shell setup
+    - role: shell
+      tags: [shell, zsh]
+
+    # Development tools
+    - role: python
+      tags: [python, uv]
+
+    - role: node
+      tags: [node, nvm]
+
+    # SSH configuration
+    - role: ssh
+      tags: [ssh]
+
+    # Symlink dotfiles (run last)
+    - role: dotfiles
+      tags: [dotfiles, symlinks]

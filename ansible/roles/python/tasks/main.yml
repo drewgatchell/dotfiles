@@ -1,0 +1,33 @@
+---
+- name: Check if uv is installed
+  ansible.builtin.command: which uv
+  register: uv_check
+  changed_when: false
+  failed_when: false
+
+- name: Install uv via Homebrew (macOS)
+  community.general.homebrew:
+    name: uv
+    state: present
+  when:
+    - ansible_os_family == "Darwin"
+    - uv_check.rc != 0
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+
+- name: Install uv via installer (Linux)
+  ansible.builtin.shell: |
+    curl -LsSf https://astral.sh/uv/install.sh | sh
+  args:
+    creates: "{{ ansible_env.HOME }}/.cargo/bin/uv"
+  when:
+    - ansible_os_family != "Darwin"
+    - uv_check.rc != 0
+
+- name: Install Python 3.12 via uv
+  ansible.builtin.shell: |
+    uv python install 3.12
+  args:
+    creates: "{{ ansible_env.HOME }}/.local/share/uv/python"
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.HOME }}/.cargo/bin:{{ ansible_env.PATH }}"
