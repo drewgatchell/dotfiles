@@ -1,7 +1,8 @@
 #!/bin/bash
-set -e
+set -euo pipefail
 
 DOTFILES_DIR="${HOME}/.dotfiles"
+TAGS="${TAGS:-}"
 
 echo "==> Dotfiles Setup"
 echo "    Repository: ${DOTFILES_DIR}"
@@ -60,11 +61,23 @@ install_ansible
 
 # Run Ansible playbook
 echo ""
+echo "==> Ready to run Ansible playbook"
+echo "    This will install packages and configure your system."
+if [[ -n "${TAGS:-}" ]]; then
+    echo "    Tags: ${TAGS}"
+fi
+echo ""
+read -rp "Proceed? [y/N] " confirm
+if [[ "${confirm}" != [yY] ]]; then
+    echo "Aborted."
+    exit 0
+fi
+
+echo ""
 echo "==> Running Ansible playbook..."
 cd "${DOTFILES_DIR}/ansible"
 
-if [[ -n "${TAGS}" ]]; then
-    echo "    Tags: ${TAGS}"
+if [[ -n "${TAGS:-}" ]]; then
     ansible-playbook site.yml --tags "${TAGS}"
 else
     ansible-playbook site.yml
