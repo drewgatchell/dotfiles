@@ -10,24 +10,25 @@ Portable dotfiles repository using Ansible for system provisioning. Supports mac
 curl -sL https://raw.githubusercontent.com/drew/dotfiles/main/setup.sh | bash
 ```
 
+> **Note:** The setup script will prompt for confirmation before making changes.
+
 ### Existing Clone
 
 ```bash
 cd ~/.dotfiles
-./setup.sh
+make install
 ```
 
-### Run Specific Roles
+Or run specific roles:
 
 ```bash
-# Only shell setup
-TAGS=shell ./setup.sh
+make install TAGS=shell,git
+```
 
-# Only dotfile symlinks
-TAGS=dotfiles ./setup.sh
+See all available commands:
 
-# Multiple tags
-TAGS=python,node ./setup.sh
+```bash
+make help
 ```
 
 ## What Gets Installed
@@ -47,7 +48,7 @@ TAGS=python,node ./setup.sh
 
 - **Shell:** oh-my-zsh, zsh as default shell
 - **Python:** uv (version + package management)
-- **Node.js:** nvm + LTS version
+- **Node.js:** fnm + LTS version
 
 ## Directory Structure
 
@@ -70,8 +71,12 @@ TAGS=python,node ./setup.sh
 │   └── config                  # SSH configuration
 ├── starship/
 │   └── starship.toml           # Prompt configuration
-└── nvim/
-    └── init.lua                # Neovim configuration
+├── nvim/
+│   └── init.lua                # Neovim configuration
+├── ghostty/
+│   └── config                  # Ghostty terminal config
+└── zed/
+    └── settings.json           # Zed editor config
 ```
 
 ## Symlinks Created
@@ -84,6 +89,8 @@ TAGS=python,node ./setup.sh
 | `~/.ssh/config` | `~/.dotfiles/ssh/config` |
 | `~/.config/starship.toml` | `~/.dotfiles/starship/starship.toml` |
 | `~/.config/nvim` | `~/.dotfiles/nvim` |
+| `~/.config/ghostty/config` | `~/.dotfiles/ghostty/config` |
+| `~/.config/zed/settings.json` | `~/.dotfiles/zed/settings.json` |
 
 ## Machine-Specific Configuration
 
@@ -127,7 +134,7 @@ ssh-add -l  # Should show your Bitwarden keys
 | apt | - | ✓ | Install apt packages |
 | shell | ✓ | ✓ | oh-my-zsh, set zsh as default |
 | python | ✓ | ✓ | Install uv |
-| node | ✓ | ✓ | Install nvm + Node.js LTS |
+| node | ✓ | ✓ | Install fnm + Node.js LTS |
 | ssh | ✓ | ✓ | SSH config and Bitwarden setup |
 | dotfiles | ✓ | ✓ | Create all symlinks |
 
@@ -144,8 +151,7 @@ Pull the latest changes and re-run:
 
 ```bash
 cd ~/.dotfiles
-git pull
-./setup.sh
+make update
 ```
 
 ## Customization
