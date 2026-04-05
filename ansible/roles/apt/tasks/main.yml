@@ -17,10 +17,18 @@
   args:
     creates: /usr/local/bin/starship
 
-- name: Install Neovim (Linux) - Download AppImage
+- name: Install Neovim (Linux x86_64) - Download AppImage
   ansible.builtin.get_url:
     url: https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
     dest: /usr/local/bin/nvim
     mode: '0755'
   become: true
   when: ansible_architecture == "x86_64"
+
+- name: Install Neovim (Linux ARM64) - Download AppImage
+  ansible.builtin.get_url:
+    url: https://github.com/neovim/neovim/releases/latest/download/nvim-linux-arm64.appimage
+    dest: /usr/local/bin/nvim
+    mode: '0755'
+  become: true
+  when: ansible_architecture == "aarch64"
