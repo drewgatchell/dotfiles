@@ -35,7 +35,7 @@
       tags: [python, uv]
 
     - role: node
-      tags: [node, nvm]
+      tags: [node, fnm]
 
     # SSH configuration
     - role: ssh

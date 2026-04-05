@@ -1,19 +1,35 @@
 ---
-- name: Check if nvm is installed
-  ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.nvm"
-  register: nvm_dir
+- name: Check if fnm is installed
+  ansible.builtin.command: which fnm
+  register: fnm_check
+  changed_when: false
+  failed_when: false
 
-- name: Install nvm
+- name: Install fnm via Homebrew (macOS)
+  community.general.homebrew:
+    name: fnm
+    state: present
+  when:
+    - ansible_os_family == "Darwin"
+    - fnm_check.rc != 0
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+
+- name: Install fnm via installer (Linux)
   ansible.builtin.shell: |
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+    curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
   args:
-    creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
-  when: not nvm_dir.stat.exists
+    creates: "{{ ansible_env.HOME }}/.local/share/fnm/fnm"
+  when:
+    - ansible_os_family != "Darwin"
+    - fnm_check.rc != 0
 
-- name: Install latest LTS Node.js via nvm
+- name: Install latest LTS Node.js via fnm
   ansible.builtin.shell: |
-    source {{ ansible_env.HOME }}/.nvm/nvm.sh && nvm install --lts
+    eval "$(fnm env)" && fnm install --lts
   args:
     executable: /bin/bash
-    creates: "{{ ansible_env.HOME }}/.nvm/versions/node"
+  environment:
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.HOME }}/.local/share/fnm:{{ ansible_env.PATH }}"
+  register: fnm_node_install
+  changed_when: "'installed' in fnm_node_install.stdout"
