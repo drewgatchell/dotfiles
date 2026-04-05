@@ -24,9 +24,9 @@
     - ansible_os_family != "Darwin"
     - uv_check.rc != 0
 
-- name: Install Python 3.12 via uv
+- name: Install Python {{ python_version }} via uv
   ansible.builtin.shell: |
-    uv python install 3.12
+    uv python install {{ python_version }}
   args:
     creates: "{{ ansible_env.HOME }}/.local/share/uv/python"
   environment:

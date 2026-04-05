@@ -2,6 +2,9 @@
 # Dotfiles directory
 dotfiles_dir: "{{ ansible_env.HOME }}/.dotfiles"
 
+# Tool versions
+python_version: "3.14"
+
 # Homebrew packages (macOS)
 homebrew_packages:
   - fastfetch
@@ -19,6 +22,7 @@ homebrew_packages:
 homebrew_casks:
   - ghostty
   - google-cloud-sdk
+  - jetbrains-toolbox
   - zed
 
 # APT packages (Linux)
