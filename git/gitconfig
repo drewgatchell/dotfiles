@@ -64,11 +64,11 @@
 
     # Remote
     p = push
-    pf = push --force-with-lease
+    pushf = push --force-with-lease
     pl = pull
 
     # Maintenance
-    cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master' | xargs -n 1 git branch -d"
+    cleanup = "!git branch --merged | grep -v '\\*\\|main\\|master\\|develop\\|staging\\|release' | xargs -n 1 git branch -d"
 
 [color]
     ui = auto
