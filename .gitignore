@@ -25,3 +25,6 @@ service-account*.json
 
 # Docs generated during planning (not part of the dotfiles)
 docs/
+
+# Local Claude Code worktrees
+.worktrees/
