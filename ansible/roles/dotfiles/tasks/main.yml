@@ -5,18 +5,18 @@
     state: directory
     mode: '0755'
   loop: "{{ dotfile_links }}"
-  when: item.dest | dirname != ansible_env.HOME
+  when: item.dest | dirname != ansible_facts['env']['HOME']
 
 - name: Ensure backup directory exists
   ansible.builtin.file:
-    path: "{{ ansible_env.HOME }}/.dotfiles-backup"
+    path: "{{ ansible_facts['env']['HOME'] }}/.dotfiles-backup"
     state: directory
     mode: '0755'
 
 - name: Backup existing files before symlinking
   ansible.builtin.copy:
     src: "{{ item.dest }}"
-    dest: "{{ ansible_env.HOME }}/.dotfiles-backup/{{ item.dest | basename }}.{{ ansible_date_time.iso8601_basic_short }}"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.dotfiles-backup/{{ item.dest | basename }}.{{ ansible_facts['date_time']['iso8601_basic_short'] }}"
     remote_src: true
   loop: "{{ dotfile_links }}"
   when: item.dest is exists and item.dest is not link
@@ -38,26 +38,26 @@
 
 - name: Check if local config templates should be copied
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.zshrc.local"
+    path: "{{ ansible_facts['env']['HOME'] }}/.zshrc.local"
   register: zshrc_local
 
 - name: Copy zshrc.local.example if no local config exists
   ansible.builtin.copy:
     src: "{{ dotfiles_dir }}/shell/zshrc.local.example"
-    dest: "{{ ansible_env.HOME }}/.zshrc.local"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.zshrc.local"
     mode: '0644'
     remote_src: true
   when: not zshrc_local.stat.exists
 
 - name: Check if local gitconfig exists
   ansible.builtin.stat:
-    path: "{{ ansible_env.HOME }}/.gitconfig.local"
+    path: "{{ ansible_facts['env']['HOME'] }}/.gitconfig.local"
   register: gitconfig_local
 
 - name: Copy gitconfig.local.example if no local config exists
   ansible.builtin.copy:
     src: "{{ dotfiles_dir }}/git/gitconfig.local.example"
-    dest: "{{ ansible_env.HOME }}/.gitconfig.local"
+    dest: "{{ ansible_facts['env']['HOME'] }}/.gitconfig.local"
     mode: '0644'
     remote_src: true
   when: not gitconfig_local.stat.exists

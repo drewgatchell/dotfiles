@@ -23,7 +23,7 @@
     dest: /usr/local/bin/nvim
     mode: '0755'
   become: true
-  when: ansible_architecture == "x86_64"
+  when: ansible_facts['architecture'] == "x86_64"
 
 - name: Install Neovim (Linux ARM64) - Download AppImage
   ansible.builtin.get_url:
@@ -31,4 +31,4 @@
     dest: /usr/local/bin/nvim
     mode: '0755'
   become: true
-  when: ansible_architecture == "aarch64"
+  when: ansible_facts['architecture'] == "aarch64"

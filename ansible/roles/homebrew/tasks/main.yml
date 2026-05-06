@@ -35,19 +35,35 @@
   community.general.homebrew:
     update_homebrew: true
   environment:
-    PATH: "{{ homebrew_path | dirname }}:{{ ansible_env.PATH }}"
+    PATH: "{{ homebrew_path | dirname }}:{{ ansible_facts['env']['PATH'] }}"
 
 - name: Install Homebrew packages
   community.general.homebrew:
     name: "{{ homebrew_packages }}"
     state: present
   environment:
-    PATH: "{{ homebrew_path | dirname }}:{{ ansible_env.PATH }}"
+    PATH: "{{ homebrew_path | dirname }}:{{ ansible_facts['env']['PATH'] }}"
+
+- name: Check if cask apps already exist in /Applications
+  ansible.builtin.stat:
+    path: "/Applications/{{ item.app }}"
+  loop: "{{ homebrew_casks }}"
+  loop_control:
+    label: "{{ item.name }}"
+  register: cask_app_stats
+  when:
+    - homebrew_casks is defined and homebrew_casks | length > 0
+    - item.app is defined
 
 - name: Install Homebrew casks
   community.general.homebrew_cask:
-    name: "{{ homebrew_casks }}"
+    name: "{{ item.item.name }}"
     state: present
   environment:
-    PATH: "{{ homebrew_path | dirname }}:{{ ansible_env.PATH }}"
-  when: homebrew_casks is defined and homebrew_casks | length > 0
+    PATH: "{{ homebrew_path | dirname }}:{{ ansible_facts['env']['PATH'] }}"
+  loop: "{{ cask_app_stats.results }}"
+  loop_control:
+    label: "{{ item.item.name }}"
+  when:
+    - homebrew_casks is defined and homebrew_casks | length > 0
+    - not (item.stat.exists | default(false))

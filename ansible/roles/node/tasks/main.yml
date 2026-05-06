@@ -10,18 +10,18 @@
     name: fnm
     state: present
   when:
-    - ansible_os_family == "Darwin"
+    - ansible_facts['os_family'] == "Darwin"
     - fnm_check.rc != 0
   environment:
-    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.PATH }}"
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_facts['env']['PATH'] }}"
 
 - name: Install fnm via installer (Linux)
   ansible.builtin.shell: |
     curl -fsSL https://fnm.vercel.app/install | bash -s -- --skip-shell
   args:
-    creates: "{{ ansible_env.HOME }}/.local/share/fnm/fnm"
+    creates: "{{ ansible_facts['env']['HOME'] }}/.local/share/fnm/fnm"
   when:
-    - ansible_os_family != "Darwin"
+    - ansible_facts['os_family'] != "Darwin"
     - fnm_check.rc != 0
 
 - name: Install latest LTS Node.js via fnm
@@ -30,6 +30,6 @@
   args:
     executable: /bin/bash
   environment:
-    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_env.HOME }}/.local/share/fnm:{{ ansible_env.PATH }}"
+    PATH: "/opt/homebrew/bin:/usr/local/bin:{{ ansible_facts['env']['HOME'] }}/.local/share/fnm:{{ ansible_facts['env']['PATH'] }}"
   register: fnm_node_install
   changed_when: "'installed' in fnm_node_install.stdout"
