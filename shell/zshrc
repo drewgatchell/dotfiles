@@ -61,14 +61,18 @@ elif [[ -f "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path
     source "/opt/homebrew/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc"
 fi
 
-# --- SSH Agent (Bitwarden) ---
+# --- SSH Agent (Bitwarden or 1Password) ---
 
-# Bitwarden manages SSH keys — the agent exposes them via a Unix socket.
-# Supports: DMG install (macOS), Mac App Store, and Linux.
+# Personal machines use Bitwarden; work machines use 1Password (managed by MDM).
+# First match wins, so installs typically don't collide.
 if [[ -S "$HOME/.bitwarden-ssh-agent.sock" ]]; then
     export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
 elif [[ -S "$HOME/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]]; then
     export SSH_AUTH_SOCK="$HOME/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+elif [[ -S "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock" ]]; then
+    export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+elif [[ -S "$HOME/.1password/agent.sock" ]]; then
+    export SSH_AUTH_SOCK="$HOME/.1password/agent.sock"
 fi
 
 # --- Aliases ---

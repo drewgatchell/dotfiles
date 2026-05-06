@@ -20,15 +20,21 @@
     - ssh_config.stat.exists
     - not ssh_config.stat.islnk
 
-- name: Display Bitwarden SSH agent setup instructions
+- name: Display SSH agent setup instructions
   ansible.builtin.debug:
     msg: |
       ============================================
-      Bitwarden SSH Agent Setup
+      SSH Agent Setup (Bitwarden or 1Password)
       ============================================
-      1. Install Bitwarden Desktop application
-      2. Open Bitwarden > Settings > SSH Agent
-      3. Enable "SSH Agent"
-      4. Add your SSH keys to Bitwarden vault
-      5. The zshrc will automatically detect and use the Bitwarden socket
+      The zshrc auto-detects whichever socket is present.
+
+      Bitwarden (personal — installed by this playbook):
+        1. Install Bitwarden Desktop application
+        2. Open Bitwarden > Settings > SSH Agent > Enable
+        3. Add your SSH keys to Bitwarden vault
+
+      1Password (work — typically managed by MDM, not installed here):
+        1. Open 1Password > Settings > Developer
+        2. Enable "Use the SSH agent"
+        3. Add your SSH keys to 1Password vault
       ============================================

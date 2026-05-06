@@ -112,18 +112,26 @@ export KUBECONFIG="$HOME/.kube/work-config"
 alias myproject="cd ~/work/project && source .venv/bin/activate"
 ```
 
-## SSH with Bitwarden
+## SSH Agent (Bitwarden or 1Password)
 
-This setup uses Bitwarden's SSH agent for key management:
+This setup auto-detects either Bitwarden or 1Password as the SSH agent — useful
+when personal and work machines use different password managers.
 
+**Bitwarden** (personal machines, installed by ansible):
 1. Install [Bitwarden Desktop](https://bitwarden.com/download/)
 2. Open Bitwarden → Settings → SSH Agent → Enable
 3. Add SSH keys to your Bitwarden vault
-4. The `zshrc` automatically detects and configures `SSH_AUTH_SOCK`
+
+**1Password** (work machines, typically MDM-managed — not installed by ansible):
+1. Open 1Password → Settings → Developer → "Use the SSH agent"
+2. Add SSH keys to your 1Password vault
+
+The `zshrc` probes Bitwarden's socket first, then 1Password's, and configures
+`SSH_AUTH_SOCK` to whichever exists.
 
 Verify it works:
 ```bash
-ssh-add -l  # Should show your Bitwarden keys
+ssh-add -l  # Should list your keys
 ```
 
 ## Ansible Roles
@@ -135,7 +143,7 @@ ssh-add -l  # Should show your Bitwarden keys
 | shell | ✓ | ✓ | oh-my-zsh, set zsh as default |
 | python | ✓ | ✓ | Install uv |
 | node | ✓ | ✓ | Install fnm + Node.js LTS |
-| ssh | ✓ | ✓ | SSH config and Bitwarden setup |
+| ssh | ✓ | ✓ | SSH config; agent auto-detect (Bitwarden or 1Password) |
 | dotfiles | ✓ | ✓ | Create all symlinks |
 
 ## Manual Steps After Setup
@@ -143,7 +151,7 @@ ssh-add -l  # Should show your Bitwarden keys
 1. **Open a new terminal** to load the new shell configuration
 2. **Create `~/.gitconfig.local`** with your name and email
 3. **Create `~/.zshrc.local`** for machine-specific settings (optional)
-4. **Enable SSH agent in Bitwarden** and add your keys
+4. **Enable an SSH agent** (Bitwarden or 1Password) and add your keys
 
 ## Updating
 
@@ -171,12 +179,19 @@ source ~/.zshrc
 
 ### SSH agent not working
 
-Check if Bitwarden socket exists:
+Check that one of the supported sockets exists:
 ```bash
+# Bitwarden (DMG install)
 ls -la ~/.bitwarden-ssh-agent.sock
-# or (Mac App Store)
+# Bitwarden (Mac App Store)
 ls -la ~/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock
+# 1Password (macOS)
+ls -la "$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+# 1Password (Linux)
+ls -la ~/.1password/agent.sock
 ```
+
+Also verify `echo $SSH_AUTH_SOCK` in a fresh shell points to whichever exists.
 
 ### Symlink conflicts
 

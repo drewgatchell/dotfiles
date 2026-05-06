@@ -26,7 +26,7 @@ Host *
 Host github.com
     HostName github.com
     User git
-    # Key will be provided by Bitwarden SSH agent
+    # Key will be provided by SSH agent (Bitwarden or 1Password)
 
 # =============================================================================
 # GitLab
@@ -35,7 +35,7 @@ Host github.com
 Host gitlab.com
     HostName gitlab.com
     User git
-    # Key will be provided by Bitwarden SSH agent
+    # Key will be provided by SSH agent (Bitwarden or 1Password)
 
 # =============================================================================
 # Example Host Configurations
